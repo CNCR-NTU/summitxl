@@ -1,7 +1,12 @@
 # Summit XL NTU official repository
 This is the official repository for the summit XL.
+
+## Summit XL ros official repository
+
+http://wiki.ros.org/Robots/SummitXL
   
 ## Contributors
+
 * Clemens Hutter (former NTU member) <chutter@uni-osnabrueck.de>
 
 * Enzo Menassol <n0759609@my.ntu.ac.uk>
