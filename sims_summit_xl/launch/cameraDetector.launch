@@ -1,0 +1,10 @@
+<launch>
+    <node name='camera_detector' pkg="sims_summit_xl" type="cameraDetector.py">
+        <rosparam ns='angle_of_view'>
+        <!-- Angle of view only on one side (divided by 2) in radians -->
+            horizontal : 0.52359877559829 <!-- 60° -->
+            vertical : 0.43196898986859 <!-- 49.5° -->
+        <!-- technical specs found at https://orbbec3d.com/product-astra/ -->
+        </rosparam>
+    </node>
+</launch>

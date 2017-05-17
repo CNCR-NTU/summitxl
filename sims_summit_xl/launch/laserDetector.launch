@@ -1,0 +1,3 @@
+<launch>
+  <node name='laser_Detector' pkg="sims_summit_xl" type="laserDetector.py"/>
+</launch>
