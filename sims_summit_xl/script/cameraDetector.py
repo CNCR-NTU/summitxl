@@ -54,19 +54,19 @@ class cameraDetector:
 		cv_rgb = cv2.cvtColor(cv_rgb, cv2.COLOR_BGR2RGB)
 
 		# define range of blue color in HSV
-		lower = np.array([80, 100,100])
-		upper = np.array([110, 255, 255])
+		lower = np.array([70, 100,100])
+		upper = np.array([120, 255, 255])
 		
 		# blur image and 40convert to HSV color encoding
-		blurred = cv2.GaussianBlur(cv_rgb,(11,11),0)
+		blurred = cv2.GaussianBlur(cv_rgb,(9,9),0)
 		hsv = cv2.cvtColor(blurred,cv2.COLOR_BGR2HSV)
 		
 		# HSV image to get only blue colors6
 		mask1 = cv2.inRange(hsv,lower,upper)
 		
 		# reducing the noise by eroding an then dilating, the iterations are arbitrary
-		mask2 = cv2.erode(mask1, None, iterations=4)
-		mask3 = cv2.dilate(mask2,None, iterations=4)
+		mask2 = cv2.erode(mask1, None, iterations=2)
+		mask3 = cv2.dilate(mask2,None, iterations=5)
 		
 		# find contours of the object
 		cnts = cv2.findContours(mask3.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
@@ -117,18 +117,22 @@ class cameraDetector:
 	def getPos_contour(self,cnt,cv_depth):
 		# getting the center(float coordinates), size and rotation of a rectangle which contains the contour
 		centerFloat, size, rotation = cv2.minAreaRect(cnt)
+		
+		# getting the rectangle 
+		rect = cv2.minAreaRect(cnt)		
 
-		# rounds the coordinates of the center and cast it into an int
-		centerInt = np.round(centerFloat).astype(int)
+		#getting the 4 points and round their values the to use as index later
+		box = cv2.boxPoints(rect)
+		box = np.int0(box)
 
-		# casting into ints and reducing the size of the contour to be more precise (arbitrary)
-		xSizeMin = size[0]
-		xSizeMin = int(xSizeMin/2)
-		ySizeMin = size[1]
-		ySizeMin = int(ySizeMin/2)
+		#reducing the area selected to be more precise (abritrary)
+		xMin = int(box[1][0]/2)
+		xMax = int(box[3][0]/2)
+		yMin = int(box[1][1]/2)
+		yMax = int(box[3][1]/2)    
 
 		# getting the depth points corresponding to the rectangle obtained from the contour
-		depthObject = cv_depth[(centerInt[0]-xSizeMin):(centerInt[0]+xSizeMin),(centerInt[1]-ySizeMin):(centerInt[1]+ySizeMin)]
+		depthObject = cv_depth[xMin:xMax,yMin:yMax]
 
 		# getting rid of all Nan values which are not useful
 		depthArray = depthObject[~np.isnan(depthObject)]
