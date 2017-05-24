@@ -63,7 +63,7 @@ class laserDetector:
 			# calculate angle of the objects location. 0 is straight ahead
 			minCurrentRangeAngle = data.angle_min + minCurrentRangeID * data.angle_increment
 			# here we only have an x angle, so the y is set arbitrarily			
-			rospy.logwarn(PositionMsg(minCurrentRangeAngle, minCurrentRange))
+			rospy.logwarn(PositionMsg(minCurrentRangeAngle, -1,minCurrentRange))
 			
 
 

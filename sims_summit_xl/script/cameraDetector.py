@@ -18,7 +18,7 @@ class cameraDetector:
 		
 		self.bridge = CvBridge()
 		rgb_img = message_filters.Subscriber('/orbbec_astra/rgb/image_raw', Image)# /!\ if using the simulation, topic name needs to be change /!\
-		depth_img = message_filters.Subscriber('/orbbec_astra/depth_registered/image_raw', Image) # /!\ if using the simulation, topic name needs to be change /!\
+		depth_img = message_filters.Subscriber('/orbbec_astra/depth/image', Image) # /!\ if using the simulation, topic name needs to be change /!\
 		self.TimeSync = message_filters.ApproximateTimeSynchronizer([rgb_img,depth_img], 10, 0.5)
 		self.TimeSync.registerCallback(self.tracking) # callback function tracking (sending image data towards it)
 		self.image_publisher = rospy.Publisher('SIMS/image_topic',Image, queue_size=3)
@@ -65,8 +65,8 @@ class cameraDetector:
 		mask1 = cv2.inRange(hsv,lower,upper)
 		
 		# reducing the noise by eroding an then dilating, the iterations are arbitrary
-		mask2 = cv2.erode(mask1, None, iterations=5)
-		mask3 = cv2.dilate(mask2,None, iterations=5)
+		mask2 = cv2.erode(mask1, None, iterations=4)
+		mask3 = cv2.dilate(mask2,None, iterations=4)
 		
 		# find contours of the object
 		cnts = cv2.findContours(mask3.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
@@ -81,12 +81,12 @@ class cameraDetector:
 			#getting the pos
 			pos = self.getPos_contour(cnt,cv_depth)
 			if self.checkPos(pos):
-				self.lastPos = pos 
+				self.lastPos = pos
 				self.publish_PosMsg(pos)
 			else:
 				rospy.logwarn('no plausible position found')
 
-
+			self.lastPos = pos
 			#drawing squares around detected objects.
 			rect = cv2.minAreaRect(cnt)
 			box = cv2.boxPoints(rect)
@@ -135,7 +135,7 @@ class cameraDetector:
 
 		# np.mean gives the average of the array elements
 		averageDistance = np.mean(depthArray)
-		
+
 		if len(depthArray) == 0:
 			rospy.logwarn('empty depth array. all depth values are nan')
 				
@@ -162,7 +162,7 @@ class cameraDetector:
 			rospy.logwarn('distance is nan')
 		
 		# testing the distance value
-		if abs(distance-Ldistance)>0.25:
+		if abs(distance-Ldistance)>0.3:
 			ret = False
 			rospy.logwarn('distance is too different')
 		
@@ -176,27 +176,20 @@ class cameraDetector:
 
 		return ret
 
-	''' Return the X angle of displacement to the objet tracked '''
+	''' Return the X angle of displacement to the objet tracked
+	 (We only need to compute the X angle because the robot is on wheels)'''
 	def getAngleX(self,pos):
 		centerX = pos[0][0]
 		displacement = 2*centerX/self.image_width-1
 		angleX = -1*np.arctan(displacement*self.tan_horizontal)
 		return angleX
 
-	''' Return the Y angle of displacement'''
-	def getAngleY(self,pos):
-		centerY = pos[0][1]
-		displacement = 2*centerY/self.image_height-1
-		angleY = -1*np.arctan(displacement*self.tan_vertical)
-		return angleY
-
 	''' Publish the position of the object detected '''
 	def publish_PosMsg(self,pos):
 		# getting angles from pos
 		angleX = self.getAngleX(pos)
-		angleY = self.getAngleY(pos)
 		#creating the Position_Msg and publishing it
-		pos_Msg = Position_Msg(angleX,angleY,pos[1])
+		pos_Msg = Position_Msg(angleX,pos[1])
 		self.pos_publisher.publish(pos_Msg)
 
 		
