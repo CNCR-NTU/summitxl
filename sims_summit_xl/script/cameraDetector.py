@@ -54,8 +54,8 @@ class cameraDetector:
 		cv_rgb = cv2.cvtColor(cv_rgb, cv2.COLOR_BGR2RGB)
 
 		# define range of blue color in HSV
-		lower = np.array([70, 100,100])
-		upper = np.array([120, 255, 255])
+		lower = np.array([80, 100,100])
+		upper = np.array([110, 255, 255])
 		
 		# blur image and 40convert to HSV color encoding
 		blurred = cv2.GaussianBlur(cv_rgb,(9,9),0)
@@ -125,14 +125,17 @@ class cameraDetector:
 		box = cv2.boxPoints(rect)
 		box = np.int0(box)
 
-		#reducing the area selected to be more precise (abritrary)
-		xMin = int(box[1][0]/2)
-		xMax = int(box[3][0]/2)
-		yMin = int(box[1][1]/2)
-		yMax = int(box[3][1]/2)    
+		#getting the points and the size of the box around the object
+		xMin = box[1][0]
+		xMax = box[3][0]
+		xSize = abs(xMax-xMin)
+		yMin = box[1][1]
+		yMax = box[3][1]  
+		ySize = abs(yMax-yMin) 
 
-		# getting the depth points corresponding to the rectangle obtained from the contour
-		depthObject = cv_depth[xMin:xMax,yMin:yMax]
+		# getting the depth points corresponding to the rectangle obtained from the contour 
+		#reducing the area selected by 1/3 the size of the box to be more precise (arbitrary)
+		depthObject = cv_depth[(xMin+xSize/3):(xMax-xSize/3),(yMin+ySize/3):(yMax-ySize/3)]
 
 		# getting rid of all Nan values which are not useful
 		depthArray = depthObject[~np.isnan(depthObject)]
