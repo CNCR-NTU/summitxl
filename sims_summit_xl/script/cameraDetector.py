@@ -5,24 +5,24 @@ import message_filters # filter the data send by camera (used for synchronizing 
 import numpy as np
 import cv2
 from cv_bridge import CvBridge, CvBridgeError # bridge for converting ROS Messages to OpenCV encoding and reverse
-from sensor_msgs.msg import Image # encoding type of ROS Images
+from sensor_msgs.msg import Image, Joy # encoding type of ROS Images
 from sims_summit_xl.msg import pos as Position_Msg # definition of Position_Msg (msg/pos.msg)
 
 np.seterr(all='raise')  
 
-class cameraDetector:
+class CameraDetector:
 	'''Initializing bridge subscriber and Publisher and getting data 
 	from camera and synchronizing rgb and depth frames'''
 	def __init__(self):
 		
 		
 		self.bridge = CvBridge()
-		rgb_img = message_filters.Subscriber('/orbbec_astra/rgb/image_raw', Image)# /!\ if using the simulation, topic name needs to be change /!\
-		depth_img = message_filters.Subscriber('/orbbec_astra/depth/image', Image) # /!\ if using the simulation, topic name needs to be change /!\
+		rgb_img = message_filters.Subscriber('/orbbec_astra/rgb/image_raw', Image)
+		depth_img = message_filters.Subscriber('/orbbec_astra/depth/image', Image) # /!\ if using the simulation : image_raw if not : image/!\
 		self.TimeSync = message_filters.ApproximateTimeSynchronizer([rgb_img,depth_img], 10, 0.5)
 		self.TimeSync.registerCallback(self.tracking) # callback function tracking (sending image data towards it)
-		self.image_publisher = rospy.Publisher('SIMS/image_topic',Image, queue_size=3)
-		self.pos_publisher = rospy.Publisher('SIMS/position_data',Position_Msg,queue_size=3)
+		self.image_publisher = rospy.Publisher('/SIMS/image_topic',Image, queue_size=3)
+		self.pos_publisher = rospy.Publisher('/SIMS/position_data',Position_Msg,queue_size=3) 
 
 		''' Initializing all variables needed'''
 		self.lastPos = None
@@ -202,7 +202,7 @@ class cameraDetector:
 		
 if __name__ == '__main__':
 	rospy.init_node('camera_detector')
-	detector = cameraDetector()
+	detector = CameraDetector()
 	try:
 		rospy.spin()
 	except rospy.ROSInterruptException:

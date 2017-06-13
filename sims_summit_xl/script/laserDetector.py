@@ -4,7 +4,7 @@
 import rospy
 import numpy as np
 from sensor_msgs.msg import LaserScan
-from simple_follower.msg import position as PositionMsg
+from sims_summit_xl.msg import pos as Position_Msg
 		
 class laserDetector:
 	def __init__(self):
@@ -12,7 +12,7 @@ class laserDetector:
 		self.winSize = 2
 		self.deltaDist = 0.2		
 		self.scanSubscriber = rospy.Subscriber('/hokuyo_base/scan', LaserScan, self.dataProcess)
-
+		self.pos_publisher = rospy.Publisher('/SIMS/position_data',Position_Msg,queue_size=3)
 	def dataProcess(self, data):
 		#min and max range detection [m]
 		self.minDetectableRange = data.range_min
@@ -63,7 +63,7 @@ class laserDetector:
 			# calculate angle of the objects location. 0 is straight ahead
 			minCurrentRangeAngle = data.angle_min + minCurrentRangeID * data.angle_increment
 			# here we only have an x angle, so the y is set arbitrarily			
-			rospy.logwarn(PositionMsg(minCurrentRangeAngle, -1,minCurrentRange))
+			self.pos_publisher.publish(Position_Msg(minCurrentRangeAngle,minCurrentRange))
 			
 
 
