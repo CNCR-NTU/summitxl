@@ -9,7 +9,7 @@ http://wiki.ros.org/Robots/SummitXL
 
 * Clemens Hutter (former NTU member) <chutter@uni-osnabrueck.de>
 
-* Enzo Menassol <n0759609@my.ntu.ac.uk>
+* Enzo Menassol <enzomena@gmail.com>
 
 * Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
   
