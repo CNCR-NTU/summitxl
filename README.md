@@ -7,15 +7,23 @@ http://wiki.ros.org/Robots/SummitXL
   
 ## Contributors
 
-* Clemens Hutter (former NTU member) <chutter@uni-osnabrueck.de>
-
-* Enzo Menassol <enzomena@gmail.com>
+* Josh Paveley <josh.paveley2016@my.ntu.ac.uk>
 
 * Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
+
+## Former team
+
+* Clemens Hutter (former NTU member) <chutter@uni-osnabrueck.de>
+
+* Enzo Menassol (former NTU member) <enzomena@gmail.com>
+
+* Dr. Kofi Appiah <kofi.appiah@ntu.ac.uk>
   
 ## Supervisory team
 * Prof. Martin McGinnity <martin.mcginnity@ntu.ac.uk>
 
-* Dr. Kofi Appiah <kofi.appiah@ntu.ac.uk>
+* Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
 
-2017 (c) Computational Neurosciences and Cognitive Robotics Lab - Nottingham Trent University
+
+
+2018 (c) Computational Neurosciences and Cognitive Robotics Lab - Nottingham Trent University
