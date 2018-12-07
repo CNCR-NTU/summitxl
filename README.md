@@ -13,9 +13,9 @@ http://wiki.ros.org/Robots/SummitXL
 
 ## Former team
 
-* Clemens Hutter (former NTU member) <chutter@uni-osnabrueck.de>
+* Clemens Hutter <chutter@uni-osnabrueck.de>
 
-* Enzo Menassol (former NTU member) <enzomena@gmail.com>
+* Enzo Menassol <enzomena@gmail.com>
 
 * Dr. Kofi Appiah <kofi.appiah@ntu.ac.uk>
   
