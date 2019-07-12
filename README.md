@@ -20,9 +20,14 @@ http://wiki.ros.org/Robots/SummitXL
 * Dr. Kofi Appiah <kofi.appiah@ntu.ac.uk>
   
 ## Supervisory team
+
 * Prof. Martin McGinnity <martin.mcginnity@ntu.ac.uk>
 
 * Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
+
+## Simulation
+
+For Summit XL simulation instructions see the repository wiki
 
 
 
